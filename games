@@ -1,0 +1,110 @@
+const canvas = document.getElementById("snakeCanvas");
+const ctx = canvas.getContext("2d");
+
+const boxSize = 20;
+const canvasSize = 400;
+
+const snake = {
+  x: 10,
+  y: 10,
+  dx: boxSize,
+  dy: 0,
+  body: [{ x: 10, y: 10 }],
+};
+
+const apple = {
+  x: Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize,
+  y: Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize,
+};
+
+function draw() {
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvasSize, canvasSize);
+
+  // Draw the snake
+  ctx.fillStyle = "green";
+  snake.body.forEach((segment) => {
+    ctx.fillRect(segment.x, segment.y, boxSize, boxSize);
+  });
+
+  // Draw the apple
+  ctx.fillStyle = "red";
+  ctx.fillRect(apple.x, apple.y, boxSize, boxSize);
+}
+
+function move() {
+  const head = { x: snake.x + snake.dx, y: snake.y + snake.dy };
+  snake.body.unshift(head);
+
+  // Check if the snake ate the apple
+  if (head.x === apple.x && head.y === apple.y) {
+    // Generate a new apple
+    apple.x = Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize;
+    apple.y = Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize;
+  } else {
+    // Remove the tail segment
+    snake.body.pop();
+  }
+}
+
+function checkCollision() {
+  // Check if the snake hit the canvas boundaries
+  if (
+    snake.x < 0 ||
+    snake.x >= canvasSize ||
+    snake.y < 0 ||
+    snake.y >= canvasSize
+  ) {
+    resetGame();
+  }
+
+  // Check if the snake hit itself
+  for (let i = 1; i < snake.body.length; i++) {
+    if (snake.body[i].x === snake.x && snake.body[i].y === snake.y) {
+      resetGame();
+    }
+  }
+}
+
+function resetGame() {
+  alert("Game Over!");
+  snake.x = 10;
+  snake.y = 10;
+  snake.body = [{ x: 10, y: 10 }];
+  snake.dx = boxSize;
+  snake.dy = 0;
+}
+
+function update() {
+  move();
+  checkCollision();
+}
+
+function gameLoop() {
+  draw();
+  update();
+  requestAnimationFrame(gameLoop);
+}
+
+document.addEventListener("keydown", (event) => {
+  switch (event.key) {
+    case "ArrowUp":
+      snake.dx = 0;
+      snake.dy = -boxSize;
+      break;
+    case "ArrowDown":
+      snake.dx = 0;
+      snake.dy = boxSize;
+      break;
+    case "ArrowLeft":
+      snake.dx = -boxSize;
+      snake.dy = 0;
+      break;
+    case "ArrowRight":
+      snake.dx = boxSize;
+      snake.dy = 0;
+      break;
+  }
+});
+
+gameLoop();
