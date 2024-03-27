@@ -23,19 +23,6 @@ function draw() {
 
   // Draw the snake
   ctx.fillStyle = "green";
-  snake.body.forEach((segment) => {
-    ctx.fillRect(segment.x, segment.y, boxSize, boxSize);
-  });
-
-  // Draw the apple
-  ctx.fillStyle = "red";
-  ctx.fillRect(apple.x, apple.y, boxSize, boxSize);
-}
-
-function move() {
-  const head = { x: snake.x + snake.dx, y: snake.y + snake.dy };
-  snake.body.unshift(head);
-
   // Check if the snake ate the apple
   if (head.x === apple.x && head.y === apple.y) {
     // Generate a new apple
