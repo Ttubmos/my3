@@ -7,11 +7,6 @@ const canvasSize = 400;
 const snake = {
   x: 10,
   y: 10,
-  dx: boxSize,
-  dy: 0,
-  body: [{ x: 10, y: 10 }],
-};
-
 const apple = {
   x: Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize,
   y: Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize,
